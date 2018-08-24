@@ -1,0 +1,22 @@
+{
+  "name": "liri-bot",
+  "version": "1.0.0",
+  "description": "Language Interpretation and Recognition Interface ",
+  "main": "liri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andypants152/LIRI-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andypants152/LIRI-bot/issues"
+  },
+  "homepage": "https://github.com/andypants152/LIRI-bot#readme",
+  "dependencies": {
+    "inquirer": "^6.2.0"
+  }
+}
