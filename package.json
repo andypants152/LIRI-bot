@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/andypants152/LIRI-bot#readme",
   "dependencies": {
-    "inquirer": "^6.2.0"
+    "dotenv": "^6.0.0",
+    "inquirer": "^6.2.0",
+    "moment": "^2.22.2",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.88.0"
   }
 }
