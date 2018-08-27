@@ -8,12 +8,14 @@ var request = require("request");
 
 var fs = require("fs");
 
+var inquirer = require("inquirer");
+
 //get the input arguments
 var input = process.argv.splice(2);
 var searchTerm = "";
 
 //if there were arguments...
-if (input) {
+if (input.length > 0) {
     //concatenate the search term arguments
     for (var i = 1; i < input.length; i++) {
         searchTerm += input[i];
@@ -24,6 +26,37 @@ if (input) {
 //if there weren't any arguments 
 else {
     //future Inquirer menu here...
+    inquirer.prompt([{
+        type: "list",
+        message: "What would you like to do?",
+        choices: ["Search for a concert by artist", "Search for a song on Spotify", "Look up a movie's info", "Do what it says"],
+        name: "choice"
+    },
+    {
+        type: "input",
+        message: "what are you searching for?",
+        name: "search",
+        when: function(answer){
+            return answer.choice != "Do what it says";
+        }
+    }]).then(function(response){
+        searchTerm = response.search;
+        switch(response.choice){
+            case "Search for a concert by artist":
+                liri("concert-this");
+            break;
+            case "Search for a song on Spotify":
+                liri("spotify-this-song");
+            break;
+            case "Look up a movie's info":
+                liri("movie-this");
+            break;
+            case "Do what it says":
+                liri("do-what-it-says");
+            break;
+        }
+        console.log(response.choice);
+    })
 }
 
 function liri(command){
