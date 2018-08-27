@@ -6,6 +6,8 @@ var spotify = new Spotify(keys.spotify);
 
 var request = require("request");
 
+var fs = require("fs");
+
 //get the input arguments
 var input = process.argv.splice(2);
 var searchTerm = "";
@@ -16,8 +18,17 @@ if (input) {
     for (var i = 1; i < input.length; i++) {
         searchTerm += input[i];
     }
+    liri(input[0]);
+
+}
+//if there weren't any arguments 
+else {
+    //future Inquirer menu here...
+}
+
+function liri(command){
     //identify the command argument
-    switch (input[0]) {
+    switch (command) {
         case "concert-this":
             concert(searchTerm);
             break;
@@ -28,17 +39,17 @@ if (input) {
             movie(searchTerm);
             break;
         case "do-what-it-says":
-
+            fs.readFile("random.txt", "utf8", function(error, data) {
+                if(error) console.log(error);
+                input = data.split(",");
+                searchTerm = input[1];
+                liri(input[0]);
+            })
             break;
         default:
             console.log("Invalid Option");
             break;
     }
-
-}
-//if there weren't any arguments 
-else {
-    //future Inquirer menu here...
 }
 
 //function for searcing an artist on bands in town, and displaying the results
@@ -62,25 +73,25 @@ function concert(artist) {
 
 //function for searching spotify for a song and displaying the information about it
 function music(song) {
-    spotify.search({ type: 'track', query: song }, function(err, data) {
+    spotify.search({ type: 'track', query: song }, function (err, data) {
         if (err) return console.log('Error occurred: ' + err);
         var songs = data.tracks.items;
-       for(var i = 0; i < songs.length; i++){
-           console.log("**********");
-           for(var j = 0; j < songs[i].artists.length; j++){
-           console.log("Artist " + (j + 1) + ": " + songs[i].artists[j].name);
-           }
-           console.log("Song Name: " + songs[i].name);
-           console.log("Preview: " + songs[i].preview_url);
-           console.log("Album: " + songs[i].album.name);
-       }
-      });
+        for (var i = 0; i < songs.length; i++) {
+            console.log("**********");
+            for (var j = 0; j < songs[i].artists.length; j++) {
+                console.log("Artist " + (j + 1) + ": " + songs[i].artists[j].name);
+            }
+            console.log("Song Name: " + songs[i].name);
+            console.log("Preview: " + songs[i].preview_url);
+            console.log("Album: " + songs[i].album.name);
+        }
+    });
 }
 
 //function for searching OMDB and displaying the movies information
 function movie(movie) {
 
-    request("http://www.omdbapi.com/?t=" + movie + "&plot=short&apikey=trilogy", function(error, response, info) {
+    request("http://www.omdbapi.com/?t=" + movie + "&plot=short&apikey=trilogy", function (error, response, info) {
         if (!error && response.statusCode === 200) {
             info = JSON.parse(info);
             console.log("Movie Name: " + info.Title);
@@ -90,16 +101,7 @@ function movie(movie) {
             console.log("Language: " + info.Language);
             console.log("Plot: " + info.Plot);
             console.log("Actors: " + info.Actors);
-     
+
         }
-});
-/*** Title of the movie.
-   * Year the movie came out.
-   * IMDB Rating of the movie.
-   * Rotten Tomatoes Rating of the movie.
-   * Country where the movie was produced.
-   * Language of the movie.
-   * Plot of the movie.
-   * Actors in the movie.
- */
+    });
 }
