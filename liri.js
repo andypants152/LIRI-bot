@@ -10,6 +10,8 @@ var fs = require("fs");
 
 var inquirer = require("inquirer");
 
+var moment = require("moment");
+
 //get the input arguments
 var input = process.argv.splice(2);
 var searchTerm = "";
@@ -63,13 +65,28 @@ function liri(command){
     //identify the command argument
     switch (command) {
         case "concert-this":
-            concert(searchTerm);
+            if(searchTerm){
+                concert(searchTerm);
+            }
+            else{
+                concert("Lady Gaga");
+            }
             break;
         case "spotify-this-song":
-            music(searchTerm);
+            if(searchTerm){
+                music(searchTerm);
+            }
+            else{
+                music("The Sign");
+            }
             break;
         case "movie-this":
-            movie(searchTerm);
+            if(searchTerm){
+                movie(searchTerm);
+            }
+            else{
+                movie("Mr. Nobody");
+            }
             break;
         case "do-what-it-says":
             fs.readFile("random.txt", "utf8", function(error, data) {
@@ -98,7 +115,8 @@ function concert(artist) {
                 console.log("**********");
                 console.log("Venue Name: " + parsed[i].venue.name);
                 console.log("Location: " + parsed[i].venue.city + ", " + parsed[i].venue.region);
-                console.log("Date: " + parsed[i].datetime);
+                var formattedTime = moment(parsed[i].datetime, "YYYY-MM-DD HH:mm:ss").format("MM-DD-YYYY");
+                console.log("Date: " + formattedTime);
             }
         }
     });
